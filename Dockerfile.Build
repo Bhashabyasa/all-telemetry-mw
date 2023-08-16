@@ -1,0 +1,12 @@
+FROM node:14.9-buster-slim
+MAINTAINER "Mahesh" "mahesh@ilimi.in"
+RUN apt-get update
+RUN apt-get install zip -y
+RUN mkdir -p /opt/telemetry
+ADD src /opt/telemetry/
+WORKDIR /opt/telemetry/
+RUN npm install
+WORKDIR /opt
+CMD ["zip", "-r", "telemetry-service.zip", "telemetry"]
+WORKDIR /opt/telemetry/
+CMD ["node", "app.js", "&"]

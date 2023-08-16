@@ -1,0 +1,21 @@
+version: '3.1'
+services:
+  telemetry-service:
+    image: telemetry-mysql:main
+    ports:
+      - 9001:9001
+    restart: always
+    environment:
+      MYSQL_HOST:
+      MYSQL_USER:
+      MYSQL_PORT:
+      MYSQL_DATABASE:
+      MYSQL_PASSWORD:
+      sendAnonymousDataToALL: 'yes'
+      UrlForAnonymousDataToALL:
+      telemetry_local_storage_type: 'mysql'
+      telemetry_local_storage_enabled: 'true'
+      telemetry_mysql_log_enabled: 'true'
+      node_env: 'prod'
+      telemetry_service_port: 9001
+      table_prefix:

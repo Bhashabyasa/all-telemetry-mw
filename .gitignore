@@ -1,0 +1,12 @@
+package-lock.json
+node_modules
+.nyc_output
+coverage
+.audit.json
+telemetry-*.log
+mochawesome-report
+*.log
+.DS_Store
+.idea
+data
+docker-compose-local.yml

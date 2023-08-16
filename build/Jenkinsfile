@@ -1,0 +1,49 @@
+node() {
+    withCredentials([string(credentialsId: 'docker_server', variable: 'docker_server')]) {
+        properties([
+            parameters([
+                string(name: 'docker_repo', defaultValue: 'samagragovernance/telemetry', description: 'Docker Image Name'),
+                string(name: 'docker_server', defaultValue: "$docker_server", description: 'Docker Registry URL'),
+
+            ])
+        ])
+    }
+    stage('Checkout') {
+            cleanWs()
+            checkout scm
+            env.commit_id = env.BRANCH_NAME
+            echo "${env.commit_id}"
+    }
+
+    stage('docker-build') {
+        sh '''
+        docker build -f ./Dockerfile.Build -t $docker_server/$docker_repo:$commit_id .
+		docker run --name=test $docker_server/$docker_repo:$commit_id 
+		containerid=$(docker ps -aqf "name=test")
+		docker cp $containerid:/opt/telemetry-service.zip telemetry-service.zip
+		docker rm $containerid
+		docker build -f ./Dockerfile -t $docker_server/$docker_repo:$commit_id .
+        '''
+        if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+            sh '''
+            docker build -t $docker_server/$docker_repo:latest .
+            '''
+        }
+    }
+
+    stage('docker-push') {
+        sh '''
+        docker push $docker_server/$docker_repo:$commit_id
+        '''
+        if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+            sh '''
+            docker push $docker_server/$docker_repo:latest
+            '''
+        }
+    }
+   stage('Start deploy job with latest tag') {
+         if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') { 
+                build job: 'ULP/deploy-staging/telemetry/', parameters: [string(name: 'tag', value: 'latest')]
+         }
+   }
+}
