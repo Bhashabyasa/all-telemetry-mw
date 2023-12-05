@@ -86,7 +86,7 @@ class MysqlDispatcher extends winston.Transport {
                     }).map((event) => {
                         event.context.uid = 'anonymous';
                         event.context.cdata = event.context.cdata.filter(function (cdataEle, index) {
-                            if (index > 3) {
+                            if (cdataEle.type === "school_name" || cdataEle.type === "class_studying_id" || cdataEle.type === "udise_code") {
                                 return false; //skip
                             }
                             return true;
