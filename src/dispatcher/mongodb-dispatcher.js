@@ -53,7 +53,7 @@ class MongoDBDispatcher extends winston.Transport {
     let message = msg;
     if (typeof message === "string") {
       try {
-        message = JSON.parse(message);
+        message = JSON.parse(msg);
       } catch (err) {
         console.error("Failed to parse message", err);
         return callback(err);
@@ -63,7 +63,7 @@ class MongoDBDispatcher extends winston.Transport {
     const promises = [];
 
     try {
-      for (const event of message.msg.events) {
+      for (const event of message.events) {
         const pid = event.context.pdata ? event.context.pdata.pid : undefined;
         promises.push(
           this.collection.insertOne({
@@ -83,18 +83,63 @@ class MongoDBDispatcher extends winston.Transport {
       return callback(err);
     }
 
-    try {
-      await Promise.all(promises);
-      console.log("Data inserted successfully!");
-      callback(); // Invoke callback indicating success
-    } catch (err) {
-      console.error("Unable to insert data into MongoDB", err);
-      callback(err); // Invoke callback with error
+    if (
+      process.env.sendAnonymousDataToALL === "yes" &&
+      process.env.UrlForAnonymousDataToALL
+    ) {
+      let anonymousEventsArr = message.events
+        .filter((event) => {
+          if (event.eid === "LOG" && event.edata.type === "api_login_call") {
+            return false; // skip
+          }
+          return true;
+        })
+        .map((event) => {
+          event.context.uid = "anonymous";
+          event.context.cdata = event.context.cdata
+            .filter((cdataEle) => {
+              if (
+                cdataEle.type === "school_name" ||
+                cdataEle.type === "class_studying_id" ||
+                cdataEle.type === "udise_code"
+              ) {
+                return false; // skip
+              }
+              return true;
+            })
+            .map((cdataEle) => {
+              if (cdataEle.type === "Buddy User") {
+                cdataEle.id = "anonymous";
+              }
+              return cdataEle;
+            });
+          return event;
+        });
+
+      message.events = anonymousEventsArr;
+
+      try {
+        const response = await fetch(process.env.UrlForAnonymousDataToALL, {
+          method: "POST",
+          body: JSON.stringify(message),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        console.log(JSON.stringify(response));
+
+        if (response.status === 200 || response.status === 201) {
+          console.log("Data logged into ALL telemetry");
+        } else {
+          console.log("Data is not logged into ALL telemetry");
+        }
+      } catch (err) {
+        console.error("Unable to insert data into MongoDB", err);
+      }
     }
+
+    callback();
   }
 }
-
-// Register MongoDBDispatcher with Winston
 winston.transports.mongodb = MongoDBDispatcher;
 
 module.exports = MongoDBDispatcher;
