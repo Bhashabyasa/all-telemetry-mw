@@ -19,3 +19,9 @@ services:
       node_env: 'prod'
       telemetry_service_port: 9001
       table_prefix:
+      MONGODB_HOST:
+      MONGODB_USER: 
+      MONGODB_PASSWORD:
+      MONGODB_PORT:
+      MONGODB_DATABASE:
+      MONGODB_COLLECTION_NAME:
