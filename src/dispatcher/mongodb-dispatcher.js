@@ -84,8 +84,8 @@ class MongoDBDispatcher extends winston.Transport {
     }
 
     if (
-      process.env.sendAnonymousDataToALL === "yes" &&
-      process.env.UrlForAnonymousDataToALL
+      process.env.UrlForAnonymousDataToALL &&
+      process.env.sendAnonymousDataToALL === "yes"
     ) {
       let anonymousEventsArr = message.events
         .filter((event) => {
@@ -124,9 +124,6 @@ class MongoDBDispatcher extends winston.Transport {
           body: JSON.stringify(message),
           headers: { "Content-Type": "application/json" },
         });
-
-        console.log(JSON.stringify(response));
-
         if (response.status === 200 || response.status === 201) {
           console.log("Data logged into ALL telemetry");
         } else {
