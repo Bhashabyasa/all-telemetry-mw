@@ -27,6 +27,6 @@ const envVariables = {
     mongodbPort: process.env.MONGODB_PORT,
     mongodbDatabase: process.env.MONGODB_DATABASE,
     mongodbPassword: process.env.MONGODB_PASSWORD,
-    mongodbCollectionName:process.env.MONGODB_COLLECTION_NAME
+    mongodbCollectionPrefix:process.env.MONGODB_COLLECTION_PREFIX
 }
 module.exports = envVariables;
