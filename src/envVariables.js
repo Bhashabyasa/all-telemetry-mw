@@ -5,7 +5,7 @@ const envVariables = {
     level: process.env.telemetry_log_level || 'info',
     localStorageEnabled: process.env.telemetry_local_storage_enabled || 'true',
     telemetryProxyEnabled: process.env.telemetry_proxy_enabled,
-    dispatcher: process.env.telemetry_local_storage_type || 'mysql' ,
+    dispatcher: process.env.telemetry_local_storage_type || 'mongodb' ,
     proxyURL: process.env.telemetry_proxy_url || '',
     proxyAuthKey: process.env.telemetry_proxy_auth_key,
     encodingType: process.env.telemetry_encoding_type,
@@ -27,6 +27,6 @@ const envVariables = {
     mongodbPort: process.env.MONGODB_PORT,
     mongodbDatabase: process.env.MONGODB_DATABASE,
     mongodbPassword: process.env.MONGODB_PASSWORD,
-    mongodbCollectionName:process.env.MONGODB_COLLECTION_NAME
+    mongodbCollectionPrefix:process.env.MONGODB_COLLECTION_PREFIX
 }
 module.exports = envVariables;
