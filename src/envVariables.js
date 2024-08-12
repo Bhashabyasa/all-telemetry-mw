@@ -23,10 +23,8 @@ const envVariables = {
     threads: process.env.telemetry_service_threads || os.cpus().length,
     sendAnonymousDataToALL:process.env.sendAnonymousDataToALL || 'yes',
     mongodbHost: process.env.MONGODB_HOST,
-    mongodbUser: process.env.MONGODB_USER,
-    mongodbPort: process.env.MONGODB_PORT,
     mongodbDatabase: process.env.MONGODB_DATABASE,
-    mongodbPassword: process.env.MONGODB_PASSWORD,
-    mongodbCollectionPrefix:process.env.MONGODB_COLLECTION_PREFIX
+    mongodbCollectionPrefix:process.env.MONGODB_COLLECTION_PREFIX,
+    mongodbConnectionUrl : process.env.MONGODB_CONNECTION_URL
 }
 module.exports = envVariables;
