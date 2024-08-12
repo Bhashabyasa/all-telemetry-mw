@@ -7,7 +7,7 @@ class MongoDBDispatcher extends winston.Transport {
 
     this.options = options;
 
-    this.url = `mongodb://${this.options.mongodbUser}:${this.options.mongodbPassword}@${this.options.mongodbHost}:${this.options.mongodbPort}/`;
+    this.url = `${this.options.mongodbConnectionUrl}`;
     this.dbName = this.options.mongodbDatabase;
     this.collectionName = `${this.options.mongodbCollectionPrefix}_telemetry`;
     this.client = null;
