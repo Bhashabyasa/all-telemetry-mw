@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   telemetry-service:
-    image: telemetry-mysql:main
+    image: telemetry-mongodb:main
     ports:
       - 9001:9001
     restart: always
@@ -11,17 +11,13 @@ services:
       MYSQL_PORT:
       MYSQL_DATABASE:
       MYSQL_PASSWORD:
-      sendAnonymousDataToALL: 'yes'
+      sendAnonymousDataToALL: 'no'
       UrlForAnonymousDataToALL:
-      telemetry_local_storage_type: 'mysql'
+      telemetry_local_storage_type: 'mongodb'
       telemetry_local_storage_enabled: 'true'
-      telemetry_mysql_log_enabled: 'true'
+      telemetry_mysql_log_enabled: 'false'
       node_env: 'prod'
       telemetry_service_port: 9001
-      table_prefix:
-      MONGODB_HOST:
-      MONGODB_USER: 
-      MONGODB_PASSWORD:
-      MONGODB_PORT:
+      MONGODB_CONNECTION_URL:
       MONGODB_DATABASE:
       MONGODB_COLLECTION_PREFIX:
