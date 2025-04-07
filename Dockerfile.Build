@@ -1,12 +1,23 @@
-FROM node:14.9-buster-slim
+FROM node:16.13.2-buster-slim
 MAINTAINER "Mahesh" "mahesh@ilimi.in"
-RUN apt-get update
-RUN apt-get install zip -y
+
+# Install required packages
+RUN apt-get update && apt-get install -y zip
+
+# Create necessary directories
 RUN mkdir -p /opt/telemetry
+
+# Copy source code into container
 ADD src /opt/telemetry/
+
+# Set working directory
 WORKDIR /opt/telemetry/
+
+# Install dependencies
 RUN npm install
-WORKDIR /opt
-CMD ["zip", "-r", "telemetry-service.zip", "telemetry"]
+
+# Set final working directory
 WORKDIR /opt/telemetry/
-CMD ["node", "app.js", "&"]
+
+# Run zip and start the Node.js app
+CMD zip -r /opt/telemetry-service.zip /opt/telemetry && node app.js

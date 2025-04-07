@@ -1,23 +1,20 @@
-version: '3.1'
+version: '3.3'
 services:
   telemetry-service:
-    image: telemetry-mongodb:main
+    image: telemetry-mongodb:latest
     ports:
-      - 9001:9001
-    restart: always
+      - "5001:5001"
     environment:
-      MYSQL_HOST:
-      MYSQL_USER:
-      MYSQL_PORT:
-      MYSQL_DATABASE:
-      MYSQL_PASSWORD:
-      sendAnonymousDataToALL: 'no'
-      UrlForAnonymousDataToALL:
-      telemetry_local_storage_type: 'mongodb'
+      MONGODB_CONNECTION_URL: mongodb+srv://bhashabyasa:zxcASD123@cluster.yl9pw.mongodb.net/telemetry?retryWrites=true&w=majority&appName=Cluster
+      MONGODB_DATABASE: telemetry
+      MONGODB_COLLECTION_PREFIX: 
+      telemetry_local_storage_type: mongodb
       telemetry_local_storage_enabled: 'true'
-      telemetry_mysql_log_enabled: 'false'
-      node_env: 'prod'
-      telemetry_service_port: 9001
-      MONGODB_CONNECTION_URL:
-      MONGODB_DATABASE:
-      MONGODB_COLLECTION_PREFIX:
+      node_env: prod
+      telemetry_service_port: 5001
+    networks:
+      - all-services
+
+networks:
+ all-services:
+    driver: bridge
