@@ -7,7 +7,7 @@ services:
     environment:
       MONGODB_CONNECTION_URL: mongodb+srv://bhashabyasa:zxcASD123@cluster.yl9pw.mongodb.net/telemetry?retryWrites=true&w=majority&appName=Cluster
       MONGODB_DATABASE: telemetry
-      MONGODB_COLLECTION_PREFIX: 
+      MONGODB_COLLECTION_PREFIX: all
       telemetry_local_storage_type: mongodb
       telemetry_local_storage_enabled: 'true'
       node_env: prod
